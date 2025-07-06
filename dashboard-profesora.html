@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Profesora - Contrology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="IMG/favicon.webp" type="image/webp">
+    <style>
+        body { font-family: 'Lato', sans-serif; background-color: #f8f7f5; color: #333; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Montserrat', sans-serif; }
+        .dashboard-container { max-width: 1200px; margin: auto; padding: 2rem; }
+        .table-custom { width: 100%; border-collapse: collapse; }
+        .table-custom th, .table-custom td { padding: 1rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        .table-custom th { background-color: #6e6054; color: white; font-weight: bold; }
+        .table-custom tr:nth-child(even) { background-color: #f8f7f5; }
+        .table-custom tr:hover { background-color: #efedea; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white shadow-md">
+        <div class="dashboard-container py-4 flex justify-between items-center">
+            <a href="index.html" class="h-10">
+                <img src="IMG/logo.webp" alt="Logo de Contrology" class="h-full">
+            </a>
+            <h1 class="text-2xl font-bold text-[#6e6054]">Dashboard de Profesora</h1>
+            <span id="user-email" class="text-sm text-gray-600 ml-4"></span>
+            <div data-netlify-identity-button></div>
+        </div>
+    </header>
+
+    <main class="dashboard-container mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Columna Izquierda -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Gestión de Alumnos -->
+            <div id="alumnos-section">
+                <h2 class="text-3xl font-bold mb-6">Gestión de Alumnos</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div id="alumnos-table-container">
+                        <p>Cargando lista de alumnos...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensajería Masiva -->
+            <div id="mensajeria-masiva-section">
+                <h2 class="text-3xl font-bold mb-6">Mensajería Masiva</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p class="mb-4">Mensaje para todos los alumnos:</p>
+                    <textarea id="mensaje-masivo-body" class="w-full p-3 border border-gray-300 rounded-md mb-4" rows="4" placeholder="Escribe tu comunicado aquí..."></textarea>
+                    <p class="text-sm text-gray-500 mb-4">Este mensaje se enviará por Email (Resend) y SMS (Twilio).</p>
+                    <button id="enviar-mensaje-masivo" class="bg-[#6e6054] text-white px-6 py-3 rounded-md hover:bg-[#5a4e44] transition-colors">Enviar Mensaje Masivo</button>
+                </div>
+            </div>
+
+            <!-- Mensajería Individual -->
+            <div id="mensajeria-individual-section">
+                <h2 class="text-3xl font-bold mb-6">Mensajería Individual</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="mb-4">
+                        <label for="alumno-selector" class="block text-gray-700 text-sm font-bold mb-2">Seleccionar Alumno:</label>
+                        <select id="alumno-selector" class="w-full p-3 border border-gray-300 rounded-md"></select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="mensaje-individual-subject" class="block text-gray-700 text-sm font-bold mb-2">Asunto (Email):</label>
+                        <input type="text" id="mensaje-individual-subject" class="w-full p-3 border border-gray-300 rounded-md" placeholder="Asunto del email">
+                    </div>
+                    <div class="mb-4">
+                        <label for="mensaje-individual-body" class="block text-gray-700 text-sm font-bold mb-2">Mensaje (Email/SMS):</label>
+                        <textarea id="mensaje-individual-body" class="w-full p-3 border border-gray-300 rounded-md" rows="4" placeholder="Escribe tu mensaje aquí..."></textarea>
+                    </div>
+                    <button id="enviar-mensaje-individual" class="bg-[#6e6054] text-white px-6 py-3 rounded-md hover:bg-[#5a4e44] transition-colors">Enviar Mensaje Individual</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha -->
+        <div class="lg:col-span-1 space-y-8">
+            <!-- Añadir Nuevo Alumno -->
+            <div id="add-alumno-section">
+                <h2 class="text-3xl font-bold mb-6">Añadir Nuevo Alumno</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="mb-4">
+                        <label for="new-alumno-email" class="block text-gray-700 text-sm font-bold mb-2">Email del Alumno</label>
+                        <input type="email" id="new-alumno-email" class="w-full p-3 border border-gray-300 rounded-md" placeholder="Email del Alumno">
+                    </div>
+                    <div class="mb-4">
+                        <label for="new-alumno-name" class="block text-gray-700 text-sm font-bold mb-2">Nombre Completo</label>
+                        <input type="text" id="new-alumno-name" class="w-full p-3 border border-gray-300 rounded-md" placeholder="Nombre Completo">
+                    </div>
+                    <div class="mb-4">
+                        <label for="new-alumno-phone" class="block text-gray-700 text-sm font-bold mb-2">Teléfono (Ej: +5492991234567)</label>
+                        <input type="tel" id="new-alumno-phone" class="w-full p-3 border border-gray-300 rounded-md" placeholder="Teléfono">
+                    </div>
+                    <div class="mb-4">
+                        <label for="new-alumno-classes-per-week" class="block text-gray-700 text-sm font-bold mb-2">Clases por semana (Ej: 2)</label>
+                        <input type="number" id="new-alumno-classes-per-week" class="w-full p-3 border border-gray-300 rounded-md" placeholder="Clases por semana">
+                    </div>
+                    <div class="mb-4">
+                        <label for="new-alumno-notes" class="block text-gray-700 text-sm font-bold mb-2">Notas privadas (condiciones, etc.)</label>
+                        <textarea id="new-alumno-notes" class="w-full p-3 border border-gray-300 rounded-md" rows="3" placeholder="Notas privadas"></textarea>
+                    </div>
+                    <button id="invite-add-alumno" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors">Invitar y Añadir Alumno</button>
+                </div>
+            </div>
+
+            <!-- Actividad Reciente -->
+            <div id="actividad-reciente-section">
+                <h2 class="text-3xl font-bold mb-6">Actividad Reciente</h2>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p>Cargando actividad...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+        console.log('Dashboard script started.');
+
+        // --- Constantes y Referencias DOM ---
+        const userEmailSpan = document.getElementById('user-email');
+        const alumnosTableContainer = document.getElementById('alumnos-table-container');
+        const alumnoSelector = document.getElementById('alumno-selector');
+        const enviarMensajeIndividualBtn = document.getElementById('enviar-mensaje-individual');
+        const enviarMensajeMasivoBtn = document.getElementById('enviar-mensaje-masivo');
+        const inviteAddAlumnoBtn = document.getElementById('invite-add-alumno');
+
+        // --- Funciones ---
+
+        // Función para cargar y mostrar la lista de alumnos
+        async function loadAlumnos() {
+            const container = alumnosTableContainer; // Usar la referencia constante
+            try {
+                const response = await fetch('/.netlify/functions/list-alumnos');
+                console.log('Response status for list-alumnos:', response.status);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error data from list-alumnos:', errorData);
+                    throw new Error(`No se pudo cargar la lista de alumnos. Estado: ${response.status}, Error: ${errorData.error || 'Desconocido'}`);
+                }
+                
+                const alumnos = await response.json();
+                console.log('Alumnos cargados:', alumnos);
+                
+                if (alumnos.length === 0) {
+                    container.innerHTML = '<p>No hay alumnos registrados.</p>';
+                    alumnoSelector.innerHTML = '<option value="">No hay alumnos</option>';
+                    return;
+                }
+
+                let tableHtml = `
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Email del Alumno</th>
+                                <th>Nombre</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                // Rellenar la tabla y el selector de alumnos
+                alumnoSelector.innerHTML = '<option value="">Selecciona un alumno</option>';
+                alumnos.forEach(alumno => {
+                    tableHtml += `
+                        <tr>
+                            <td>${alumno.email}</td>
+                            <td>${alumno.nombre || 'No especificado'}</td>
+                            <td><button class="text-red-600 hover:underline delete-alumno-btn" data-alumno-id="${alumno.id}">Dar de Baja</button></td>
+                        </tr>
+                    `;
+                    alumnoSelector.innerHTML += `<option value="${alumno.email}">${alumno.nombre} (${alumno.email})</option>`;
+                });
+
+                tableHtml += '</tbody></table>';
+                container.innerHTML = tableHtml;
+
+                // Añadir event listeners a los botones de dar de baja
+                document.querySelectorAll('.delete-alumno-btn').forEach(button => {
+                    button.addEventListener('click', async (event) => {
+                        const alumnoId = event.target.dataset.alumnoId;
+                        if (confirm('¿Estás segura de que quieres dar de baja a este alumno? Esta acción es irreversible.')) {
+                            try {
+                                const response = await fetch('/.netlify/functions/delete-alumno', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ alumnoId: alumnoId }),
+                                });
+
+                                if (!response.ok) throw new Error('Error al dar de baja al alumno.');
+
+                                alert('¡Ánimo! A veces los caminos se separan, pero siempre hay nuevas oportunidades. Alumno dado de baja con éxito.');
+                                loadAlumnos(); // Recargar la lista de alumnos
+                            } catch (error) {
+                                console.error('Error al dar de baja al alumno:', error);
+                                alert(`Hubo un error al dar de baja al alumno: ${error.message}. Por favor, intente de nuevo.`);
+                            }
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p class="text-red-500">Error al cargar los alumnos. Por favor, intente de nuevo.</p>';
+                alumnoSelector.innerHTML = '<option value="">Error al cargar</option>';
+            }
+        }
+
+        // Función para verificar el rol de administrador
+        const checkAdminRole = (user) => {
+            console.log('checkAdminRole: user', user);
+            const isAdmin = user && user.app_metadata && user.app_metadata.roles && user.app_metadata.roles.includes('admin');
+            console.log('checkAdminRole: isAdmin', isAdmin);
+            if (!isAdmin) {
+                console.log('Redirigiendo: No es admin.');
+                window.location.href = '/';
+            } else {
+                console.log('Es admin. Cargando alumnos...');
+                if (user) {
+                    userEmailSpan.textContent = user.email;
+                    console.log('Email de usuario establecido:', user.email);
+                }
+                loadAlumnos();
+            }
+        };
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOMContentLoaded fired.');
+            console.log('netlifyIdentity object:', typeof netlifyIdentity);
+
+            // Verificar si el usuario ya está logueado al cargar la página
+            const currentUser = netlifyIdentity.currentUser();
+            if (currentUser) {
+                console.log('User already logged in on DOMContentLoaded:', currentUser);
+                checkAdminRole(currentUser);
+            } else {
+                console.log('No user logged in on DOMContentLoaded.');
+            }
+
+            netlifyIdentity.on('init', user => {
+                console.log('Netlify Identity init event. User:', user);
+                checkAdminRole(user);
+            });
+
+            netlifyIdentity.on('login', user => {
+                console.log('Netlify Identity login event. User:', user);
+                checkAdminRole(user);
+            });
+
+            netlifyIdentity.on('logout', () => {
+                console.log('Netlify Identity logout event.');
+                userEmailSpan.textContent = '';
+            });
+
+            // Lógica para Mensajería Individual
+            enviarMensajeIndividualBtn.addEventListener('click', async () => {
+                const alumnoEmail = document.getElementById('alumno-selector').value;
+                const emailSubject = document.getElementById('mensaje-individual-subject').value;
+                const emailBody = document.getElementById('mensaje-individual-body').value;
+
+                if (!alumnoEmail || !emailBody) {
+                    alert('Por favor, selecciona un alumno y escribe un mensaje.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/.netlify/functions/send-communication', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            emailTo: alumnoEmail,
+                            emailSubject: emailSubject,
+                            emailBody: emailBody,
+                            // smsTo: '' // Si tuvieras el teléfono del alumno, lo pasarías aquí
+                        }),
+                    });
+
+                    if (!response.ok) throw new Error('Error al enviar el mensaje individual.');
+
+                    alert('Mensaje individual enviado con éxito!');
+                    document.getElementById('mensaje-individual-subject').value = '';
+                    document.getElementById('mensaje-individual-body').value = '';
+                } catch (error) {
+                    console.error('Error al enviar mensaje individual:', error);
+                    alert('Hubo un error al enviar el mensaje. Por favor, intente de nuevo.');
+                }
+            });
+
+            // Lógica para Mensajería Masiva (si ya existe, la mantengo, si no, la añado)
+            if (enviarMensajeMasivoBtn) {
+                enviarMensajeMasivoBtn.addEventListener('click', async () => {
+                    const mensajeMasivoBody = document.getElementById('mensaje-masivo-body').value;
+                    if (!mensajeMasivoBody) {
+                        alert('Por favor, escribe un mensaje para enviar a todos los alumnos.');
+                        return;
+                    }
+
+                    // Aquí necesitarías obtener todos los emails de los alumnos para enviarlos
+                    // o modificar la función send-communication para que envíe a todos si no se especifica emailTo
+                    // Por ahora, solo un placeholder
+                    alert('Funcionalidad de Mensajería Masiva pendiente de implementación completa.');
+                    // Ejemplo de cómo se llamaría si tuvieras todos los emails:
+                    /*
+                    const allAlumnos = Array.from(document.querySelectorAll('#alumnos-table-container tbody tr')).map(row => row.cells[0].textContent);
+                    try {
+                        const response = await fetch('/.netlify/functions/send-communication', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                emailTo: allAlumnos, // Esto requeriría que la función send-communication lo maneje
+                                emailSubject: 'Comunicado Importante',
+                                emailBody: mensajeMasivoBody,
+                            }),
+                        });
+                        if (!response.ok) throw new Error('Error al enviar el mensaje masivo.');
+                        alert('Mensaje masivo enviado con éxito!');
+                        document.getElementById('mensaje-masivo-body').value = '';
+                    } catch (error) {
+                        console.error('Error al enviar mensaje masivo:', error);
+                        alert('Hubo un error al enviar el mensaje masivo. Por favor, intente de nuevo.');
+                    }
+                    */
+                });
+            }
+
+            // Lógica para Añadir Nuevo Alumno
+            inviteAddAlumnoBtn.addEventListener('click', async () => {
+                const email = document.getElementById('new-alumno-email').value;
+                const nombre = document.getElementById('new-alumno-name').value;
+                const telefono = document.getElementById('new-alumno-phone').value;
+                const clasesPorSemana = document.getElementById('new-alumno-classes-per-week').value;
+                const notas = document.getElementById('new-alumno-notes').value;
+
+                if (!email || !nombre) {
+                    alert('El email y el nombre son obligatorios para añadir un alumno.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/.netlify/functions/add-alumno', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email, nombre, telefono, clasesPorSemana, notas
+                        }),
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.error || 'Error al añadir el alumno.');
+                    }
+
+                    // Mensaje de felicitación y confeti
+                    if (typeof confetti !== 'undefined') {
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    }
+                    alert(`¡Felicidades! Has añadido a ${nombre} a la familia Contrology. Su contraseña temporal es: ${result.tempPassword}`);
+                    
+                    // Limpiar formulario
+                    document.getElementById('new-alumno-email').value = '';
+                    document.getElementById('new-alumno-name').value = '';
+                    document.getElementById('new-alumno-phone').value = '';
+                    document.getElementById('new-alumno-classes-per-week').value = '';
+                    document.getElementById('new-alumno-notes').value = '';
+
+                    // Recargar la lista de alumnos
+                    loadAlumnos();
+
+                } catch (error) {
+                    console.error('Error al añadir alumno:', error);
+                    alert(`Hubo un error al añadir el alumno: ${error.message}. Por favor, intente de nuevo.`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

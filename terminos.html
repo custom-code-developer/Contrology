@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones - Contrology</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="IMG/favicon.webp" type="image/webp">
+    <style>
+        body { font-family: 'Lato', sans-serif; background-color: #f8f7f5; color: #333; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; }
+        .prose-custom { @apply text-gray-700 leading-relaxed; }
+        .prose-custom p { @apply mb-6; }
+        .prose-custom h2 { @apply text-3xl font-bold mt-12 mb-4 text-[#6e6054]; }
+        .prose-custom a { @apply text-[#8a7968] underline hover:text-[#6e6054]; }
+        .prose-custom ul { @apply list-disc list-inside mb-6; }
+        .prose-custom li { @apply mb-2; }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="h-10">
+                <img src="IMG/logo.webp" alt="Logo de Contrology" class="h-full">
+            </a>
+            <a href="index.html#horarios" class="bg-[#8a7968] text-white py-2 px-6 rounded-full font-bold uppercase text-sm hover:bg-[#6e6054] transition-all">
+                Reservar Clase
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <article class="max-w-3xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#6e6054] mb-8">Términos y Condiciones de Uso</h1>
+            <div class="prose-custom max-w-none">
+                <p class="text-sm text-gray-500">Última actualización: 26 de Junio de 2025</p>
+
+                <p>Bienvenido/a a Contrology. Al acceder y utilizar nuestro sitio web y nuestros servicios, usted acepta cumplir y estar sujeto a los siguientes términos y condiciones de uso. Por favor, léalos atentamente.</p>
+                
+                <h2>1. Aceptación de los Términos</h2>
+                <p>Al utilizar este sitio web, usted confirma que ha leído, entendido y aceptado estos Términos y Condiciones. Si no está de acuerdo con alguna parte de los términos, no está autorizado a utilizar este sitio web.</p>
+                
+                <h2>2. Servicios Ofrecidos</h2>
+                <p>Contrology ofrece clases de Pilates y contenido educativo relacionado con el bienestar. Los horarios, precios y disponibilidad de las clases están sujetos a cambios sin previo aviso y se mostrarán actualizados en nuestra sección de "Horarios".</p>
+                
+                <h2>3. Política de Reservas y Pagos</h2>
+                <p>Para reservar un lugar en una clase, es necesario realizar el pago por adelantado a través de los medios indicados en nuestro sitio. Una vez realizado el pago, el usuario deberá enviar el comprobante legible a través del número de WhatsApp proporcionado para confirmar la reserva. La reserva no se considerará confirmada hasta que se reciba y verifique dicho comprobante.</p>
+
+                <h2>4. Política de Cancelación y Reembolso</h2>
+                <p>Debido a que su lugar en la clase se reserva exclusivamente para usted, la inasistencia a una clase programada no es reembolsable. Si necesita cancelar o reprogramar, deberá hacerlo con un mínimo de 24 horas de antelación para que podamos ofrecer ese espacio a otro alumno. Las cancelaciones realizadas con menos de 24 horas de antelación no serán elegibles para un crédito o reprogramación.</p>
+
+                <h2>5. Uso del Sitio Web</h2>
+                <p>Usted se compromete a utilizar este sitio web únicamente con fines lícitos y de una manera que no infrinja los derechos de, restrinja o inhiba el uso y disfrute de este sitio por parte de terceros. Se prohíbe el uso de este sitio para transmitir cualquier material difamatorio, ofensivo o ilegal.</p>
+
+                <h2>6. Propiedad Intelectual</h2>
+                <p>Todo el contenido de este sitio web, incluyendo textos, gráficos, logos, imágenes y software, es propiedad de Contrology o de sus proveedores de contenido y está protegido por las leyes de propiedad intelectual. Queda prohibida la reproducción, distribución o transmisión de cualquier parte del contenido sin nuestro permiso previo por escrito.</p>
+
+                <h2>7. Descargo de Responsabilidad de Salud</h2>
+                <p>La práctica de Pilates, como cualquier actividad física, implica ciertos riesgos. Es su responsabilidad consultar con un profesional de la salud antes de comenzar cualquier programa de ejercicios. Al participar en nuestras clases, usted declara que se encuentra en buen estado de salud y asume toda la responsabilidad por cualquier lesión o daño que pueda sufrir.</p>
+
+                <h2>8. Modificaciones a los Términos</h2>
+                <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier momento. Dichas modificaciones entrarán en vigor inmediatamente después de su publicación en el sitio web. Su uso continuado del sitio después de la publicación de los cambios constituirá su aceptación de los nuevos términos.</p>
+            </div>
+        </article>
+    </main>
+    <footer class="bg-gray-800 text-white py-12 mt-16">
+        <div class="container mx-auto px-6 text-center text-xs text-gray-500">
+             <p>&copy; <span id="year"></span> Contrology. Todos los derechos reservados.</p>
+             <p class="mt-4 text-gray-600">Diseño y Desarrollo por 
+                <a href="https://repfinity.app" target="_blank" class="underline hover:text-white">Repfinity</a>
+            </p>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
